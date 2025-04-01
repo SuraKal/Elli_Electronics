@@ -10,3 +10,5 @@
     <meta name="msapplication-TileColor" content="#3399FF">
     <meta name="msapplication-config" content="{{ asset('static/images/favicon/browserconfig.xml') }}">
     <meta name="theme-color" content="#ffffff">
+
+    

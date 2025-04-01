@@ -26,20 +26,61 @@ class LoginForm extends Form
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
-    {
-        $this->ensureIsNotRateLimited();
+    // public function authenticate(): void
+    // {
+    //     $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
+    //     if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+    //         RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'form.email' => trans('auth.failed'),
-            ]);
-        }
+    //         throw ValidationException::withMessages([
+    //             'form.email' => trans('auth.failed'),
+    //         ]);
+    //     }
 
-        RateLimiter::clear($this->throttleKey());
+    //     RateLimiter::clear($this->throttleKey());
+    // }
+
+public function authenticate(): void
+{
+    $this->ensureIsNotRateLimited();
+
+    // Retrieve user by email
+    $user = \App\Models\User::where('email', $this->email)->first();
+
+    // Check if the user exists
+    if (!$user) {
+        throw ValidationException::withMessages([
+            'form.email' => trans('auth.failed'),
+        ]);
     }
+
+    // Handle different statuses
+    if ($user->status === 'inactive') {
+        throw ValidationException::withMessages([
+            'form.email' => __('Your account is inactive. Please contact support.'),
+        ]);
+    }
+
+    if ($user->status === 'suspended') {
+        throw ValidationException::withMessages([
+            'form.email' => __('Your account has been suspended. Contact support for assistance.'),
+        ]);
+    }
+
+    // Attempt login only if the user is active
+    if (!Auth::attempt($this->only(['email', 'password']), $this->remember)) {
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'form.email' => trans('auth.failed'),
+        ]);
+    }
+
+    RateLimiter::clear($this->throttleKey());
+}
+
+
 
     /**
      * Ensure the authentication request is not rate limited.

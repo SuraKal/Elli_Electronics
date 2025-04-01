@@ -13,13 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->uuid('uuid')->unique(); // Already indexed as unique
+            $table->string('name')->index(); // Index for searching users by name
+            $table->string('email')->unique(); // Already indexed as unique
+            $table->string('phone')->nullable()->unique(); // Already indexed as unique
+            $table->enum('status', ['active', 'inactive', 'suspended'])->default('active')->index(); // Index for frequent filtering
+            $table->timestamp('email_verified_at')->nullable(); // No index needed (rarely queried directly)
+            $table->string('password'); // No index needed
+            $table->string('profile_picture')->nullable(); // No index needed
             $table->rememberToken();
-            $table->timestamps();
+            $table->string('created_date');
+            $table->softDeletes(); // Enables soft delete (Consider indexing if frequently queried)
+            $table->timestamps(); // Adds created_at and updated_at (Consider indexing `created_at`)
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

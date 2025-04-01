@@ -1,15 +1,19 @@
 <?php
 
+use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Landing
+Volt::route('/', 'public.landing')->name('public.landing')->lazy();
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
 
-require __DIR__.'/auth.php';
+//  'verified', 
+// Dashboard
+Route::middleware(['auth','role:admin'])->group(function () {
+    require __DIR__ . '/admin.php';
+});
+
+Route::middleware(['guest'])->group(function () {
+    require __DIR__ . '/auth.php';
+});

@@ -193,6 +193,8 @@ new #[Layout('components.layouts.admin')] class extends Component {
         $this->reset();
     }
 
+    
+
 
     public function mount(UserService $userService, ProductService $productService){
         
@@ -215,7 +217,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             })
             ->toArray();
 
-        $this->products = $productService->getProductsActive()
+        $this->products = $productService->getProductsActive2()
                                     ->pluck('name', 'id')
                                     ->toArray();
     }

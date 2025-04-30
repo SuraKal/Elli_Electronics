@@ -7804,12 +7804,12 @@ p {
   font-weight: 400;
   font-size: 1.6rem;
   line-height: 1.25;
-  color: #3399FF
+  color: #3399FF;
   margin-bottom: 1.3rem;
 }
 
 .new-price {
-  color: #ef837b;
+  color: #3399FF !important;
   margin-right: 0.8rem;
 }
 
@@ -8689,7 +8689,7 @@ p {
 }
 
 .product.product-8 .new-price {
-  color: #3399FF
+  color: #3399FF !important;
 }
 
 .product.product-8 .btn-product {

@@ -21,6 +21,20 @@ class Tag extends Model
             if (empty($model->uuid)) {
                 $model->uuid = Str::uuid()->toString();
             }
+
+            // Generate Slug
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
+            }
         });
+    }
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
+
+    
+    public function productsActive(){
+        return $this->products()->where('status', true);
     }
 }

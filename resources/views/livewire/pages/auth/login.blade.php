@@ -26,9 +26,11 @@ new #[Layout('components.layouts.auth')] class extends Component
         if ($user->hasRole('admin')) {
             $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
         } else {
-            $this->redirectIntended(route('public.landing', absolute: false), navigate: true);
+            $this->redirectIntended(route('home', absolute: false), navigate: true);
         }
     }
+
+    
 
 }; ?>
 

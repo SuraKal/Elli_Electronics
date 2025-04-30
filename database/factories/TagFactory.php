@@ -19,7 +19,7 @@ class TagFactory extends Factory
         $status = $this->faker->boolean(60);
         return [
             'name' => substr($this->faker->word(), 0, 15),
-            'status' => $status,
+            'status' => true,
         ];
     }
 }

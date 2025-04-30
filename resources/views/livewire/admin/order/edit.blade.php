@@ -244,13 +244,23 @@ new #[Layout('components.layouts.admin')] class extends Component {
 // ->messages([
 //                 'courier_id.required_if' => 'Delivery Partner is needed if you choose it is delivered by a partner'
 //             ]);
-        $this->order->delivery->update([
-            'deliveryType' => $this->delivery_method,
-            'courier_id' => $this->courier_id
-        ]);
+        if($this->order->delivery == NULL){
+            $this->order->delivery()->create([
+                'deliveryType' => $this->delivery_method,
+                'courier_id' => $this->courier_id
+            ]);
+        }else{
+            $this->order->delivery->update([
+                'deliveryType' => $this->delivery_method,
+                'courier_id' => $this->courier_id
+            ]);
+        }
+
 
         $this->dispatch('deliveryMethod-updated');
     }
+
+
 
 
 

@@ -70,17 +70,6 @@ class User extends Authenticatable
             }
 
         });
-
-        // static::created(function ($user) {
-        //     if ($user->hasRole('corporate')) {
-        //         Corporate::create([
-        //             'user_id' => $user->id,
-        //             'company_name' => $user->name,
-        //         ]);
-        //     }
-        // });
-
-
     }
 
 

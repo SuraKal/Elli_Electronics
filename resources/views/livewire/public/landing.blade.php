@@ -1,37 +1,47 @@
 <?php
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use App\Services\CategoryService;
 
 new #[Layout('components.layouts.guest')] class extends Component
 {
-    //
-}; ?>
 
+
+};
+?>
 
 <main class="main">
     <div class="intro-slider-container">
         <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl" data-owl-options='{
                         "nav": false,
+                        "dots": true,
+                        "margin": 30,
+                        "loop": true, 
+                        "autoplay": true,  
+                        "autoplayTimeout": 3000,  
+                        "smartSpeed": 800, 
+                        "slideTransition": "linear", 
                         "responsive": {
                             "992": {
                                 "nav": true
                             }
                         }
                     }'>
+                    {{-- static/assets/images/demos/demo-13/slider/slide-1.png --}}
             <div class="intro-slide"
-                style="background-image: url(static/assets/images/demos/demo-13/slider/slide-1.png);">
+                style="background-image: url(static/images/slidder/slidder1.jpg);">
                 <div class="container intro-content">
                     <div class="row">
                         <div class="col-auto offset-lg-3 intro-col">
                             <h3 class="intro-subtitle">Trade-In Offer</h3><!-- End .h3 intro-subtitle -->
-                            <h1 class="intro-title">MacBook Air <br>Latest Model
+                            <h1 class="intro-title">WoodWork  <br>Lights
                                 <span>
                                     <sup class="font-weight-light">from</sup>
-                                    <span class="text-primary">$999<sup>,99</sup></span>
+                                    <span class="text-primary">ETB 111<sup>,99</sup></span>
                                 </span>
                             </h1><!-- End .intro-title -->
 
-                            <a href="category.html" class="btn btn-outline-primary-2">
+                            <a href="{{ route('public.category.index') }}" class="btn btn-outline-primary-2">
                                 <span>Shop Now</span>
                                 <i class="icon-long-arrow-right"></i>
                             </a>
@@ -41,7 +51,7 @@ new #[Layout('components.layouts.guest')] class extends Component
             </div><!-- End .intro-slide -->
 
             <div class="intro-slide"
-                style="background-image: url(static/assets/images/demos/demo-13/slider/slide-2.jpg);">
+                style="background-image: url(static/images/slidder/slidder2.jpg);">
                 <div class="container intro-content">
                     <div class="row">
                         <div class="col-auto offset-lg-3 intro-col">
@@ -53,7 +63,7 @@ new #[Layout('components.layouts.guest')] class extends Component
                                 </span>
                             </h1><!-- End .intro-title -->
 
-                            <a href="category.html" class="btn btn-outline-primary-2">
+                            <a href="{{ route('public.category.index') }}" class="btn btn-outline-primary-2">
                                 <span>Shop Now</span>
                                 <i class="icon-long-arrow-right"></i>
                             </a>
@@ -63,7 +73,7 @@ new #[Layout('components.layouts.guest')] class extends Component
             </div><!-- End .intro-slide -->
 
             <div class="intro-slide"
-                style="background-image: url(static/assets/images/demos/demo-13/slider/slide-3.jpg);">
+                style="background-image: url(static/images/slidder/slidder3.jpg);">
                 <div class="container intro-content">
                     <div class="row">
                         <div class="col-auto offset-lg-3 intro-col">
@@ -75,7 +85,7 @@ new #[Layout('components.layouts.guest')] class extends Component
                                 </span>
                             </h1><!-- End .intro-title -->
 
-                            <a href="category.html" class="btn btn-outline-primary-2">
+                            <a href="{{ route('public.category.index') }}" class="btn btn-outline-primary-2">
                                 <span>Shop Now</span>
                                 <i class="icon-long-arrow-right"></i>
                             </a>
@@ -170,7 +180,7 @@ new #[Layout('components.layouts.guest')] class extends Component
     <div class="mb-3"></div><!-- End .mb-3 -->
 
 
-    <livewire:public.components.category.product_list />
+    {{-- <livewire:public.components.category.product_list /> --}}
 
 
     <div class="mb-3"></div><!-- End .mb-3 -->
@@ -216,101 +226,26 @@ new #[Layout('components.layouts.guest')] class extends Component
 
     <div class="mb-1"></div><!-- End .mb-1 -->
 
-    <livewire:public.components.category.product_list />
+    {{-- <livewire:public.components.category.product_list /> --}}
 
 
 
     <div class="mb-3"></div><!-- End .mb-3 -->
 
-    <livewire:public.components.category.product_list />
+    {{-- <livewire:public.components.category.product_list /> --}}
 
 
     <div class="mb-3"></div><!-- End .mb-3 -->
 
-    <div class="container">
-        <h2 class="title title-border mb-5">Shop by Brands</h2><!-- End .title -->
-        <div class="owl-carousel mb-5 owl-simple" data-toggle="owl" data-owl-options='{
-                        "nav": false, 
-                        "dots": true,
-                        "margin": 30,
-                        "loop": false,
-                        "responsive": {
-                            "0": {
-                                "items":2
-                            },
-                            "420": {
-                                "items":3
-                            },
-                            "600": {
-                                "items":4
-                            },
-                            "900": {
-                                "items":5
-                            },
-                            "1024": {
-                                "items":6
-                            },
-                            "1280": {
-                                "items":6,
-                                "nav": true,
-                                "dots": false
-                            }
-                        }
-                    }'>
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/1.png" alt="Brand Name">
-            </a>
+    <livewire:public.components.category.popular_categories />
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/2.png" alt="Brand Name">
-            </a>
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/3.png" alt="Brand Name">
-            </a>
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/4.png" alt="Brand Name">
-            </a>
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/5.png" alt="Brand Name">
-            </a>
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/6.png" alt="Brand Name">
-            </a>
+    <livewire:public.components.section.email_subscription />
 
-            <a href="#" class="brand">
-                <img src="static/assets/images/brands/7.png" alt="Brand Name">
-            </a>
-        </div><!-- End .owl-carousel -->
-    </div><!-- End .container -->
 
-    <div class="cta cta-horizontal cta-horizontal-box bg-primary">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-2xl-5col">
-                    <h3 class="cta-title text-white">Join Our Newsletter</h3><!-- End .cta-title -->
-                    <p class="cta-desc text-white">Subcribe to get information about products and coupons</p>
-                    <!-- End .cta-desc -->
-                </div><!-- End .col-lg-5 -->
-
-                <div class="col-3xl-5col">
-                    <form action="#">
-                        <div class="input-group">
-                            <input type="email" class="form-control form-control-white"
-                                placeholder="Enter your Email Address" aria-label="Email Adress" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-white-2" type="submit"><span>Subscribe</span><i
-                                        class="icon-long-arrow-right"></i></button>
-                            </div><!-- .End .input-group-append -->
-                        </div><!-- .End .input-group -->
-                    </form>
-                </div><!-- End .col-lg-7 -->
-            </div><!-- End .row -->
-        </div><!-- End .container -->
-    </div><!-- End .cta -->
 
 
 </main><!-- End .main -->

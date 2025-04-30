@@ -39,7 +39,7 @@ new #[Layout('components.layouts.auth')] class extends Component
 
         Auth::login($user);
 
-        $this->redirect(route('public.landing', absolute: false), navigate: true);
+        $this->redirect(route('home', absolute: false), navigate: true);
     }
 
 }; ?>

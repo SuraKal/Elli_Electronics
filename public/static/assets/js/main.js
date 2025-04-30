@@ -373,7 +373,7 @@ $(document).ready(function () {
       navText: ['<i class="icon-angle-left">', '<i class="icon-angle-right">'],
       dots: false,
       smartSpeed: 400,
-      autoplay: false,
+      autoplay: true,
       autoplayTimeout: 15000,
       responsive: {
         0: {

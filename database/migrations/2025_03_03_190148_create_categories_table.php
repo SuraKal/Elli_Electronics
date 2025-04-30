@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique()->index();
+            $table->string('image')->nullable(); // No index needed (not used in queries)
             $table->text('description')->nullable();
             $table->uuid('uuid')->unique();
-            // $table->enum('status', ['active', 'inactive'])->default('active')->index(); // Index improves filtering
+            $table->string('slug')->unique()->index(); // Useful for SEO and searching
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();

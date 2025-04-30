@@ -1,9 +1,39 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Services\CategoryService;
+use App\Services\TagService;
+use App\Livewire\Actions\Logout;
+
+
 
 new class extends Component {
-    //
+
+    public function getCategoriesProperty(CategoryService $categoryService)
+    {
+        return $categoryService->getCategoriesActive()
+            ->select('name','slug')
+            ->latest()
+            ->get();
+    }
+
+    public function getTagsProperty(TagService $tagService)
+    {
+        return $tagService->getTagsActive()
+            ->select('name','slug')
+            ->latest()
+            ->get();
+    }
+
+        /**
+     * Log the current user out of the application.
+     */
+    public function logout(Logout $logout): void
+    {
+        $logout();
+
+        $this->redirect('/', navigate: true);
+    }
 }; ?>
 
 <header class="header header-10 header-intro-clearance">
@@ -43,10 +73,20 @@ new class extends Component {
                                 </div><!-- End .header-dropdown -->
                             </li>
                             <li class="">
+                                @guest
                                 <div class="header-dropdown">
                                     <a href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
-
                                 </div><!-- End .header-dropdown -->
+                                @endguest
+                                @auth
+                                <button wire:click="logout" class="d-block w-100 ps-3 pe-4 py-2 border-start border-start-4 border-primary text-start fw-medium text-white bg-primary bg-opacity-10 focus:border-primary focus:bg-opacity-25 focus:text-primary-emphasis transition">
+                                        {{ __('Log Out') }}
+                                </button>
+
+
+
+
+                                @endauth
                             </li>
                             <!-- <li class="login">
                                         <a href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
@@ -66,7 +106,7 @@ new class extends Component {
                     <i class="icon-bars"></i>
                 </button>
 
-                <a href="index.html" class="logo">
+                <a href="{{ route('home') }}" class="logo">
                     <img src="{{ asset('static/assets/images/collections/logo/logo.png') }}" alt="Logo" width="105"
                         height="25">
                 </a>
@@ -82,12 +122,14 @@ new class extends Component {
                             <div class="select-custom">
                                 <select id="cat" name="cat">
                                     <option value="">All Categories</option>
-                                    <option value="1">Woodwork Lights</option>
-                                    <option value="2">Table Wood Lamp</option>
-                                    <option value="3">Breaker</option>
-                                    <option value="3">Junction Box</option>
-                                    <option value="3">Wire</option>
-                                    <option value="4">Cable</option>
+
+                                    @foreach($this->categories as $category)
+                                    <option value="{{ $category->slug }}">
+                                        <a href="{{ route('public.category.products.index', $category->slug) }}">
+                                            {{ $category->name }}
+                                        </a>
+                                    </option>
+                                    @endforeach
                                 </select>
                             </div><!-- End .select-custom -->
                             <label for="q" class="sr-only">Search</label>
@@ -113,12 +155,12 @@ new class extends Component {
                             <ul class="compare-products">
                                 <li class="compare-product">
                                     <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                    <h4 class="compare-product-title"><a href="product.html">Blue Night
+                                    <h4 class="compare-product-title"><a href="">Blue Night
                                             Dress</a></h4>
                                 </li>
                                 <li class="compare-product">
                                     <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                    <h4 class="compare-product-title"><a href="product.html">White Long
+                                    <h4 class="compare-product-title"><a href="">White Long
                                             Skirt</a></h4>
                                 </li>
                             </ul>
@@ -131,7 +173,7 @@ new class extends Component {
                         </div><!-- End .dropdown-menu -->
                     </div><!-- End .compare-dropdown -->
 
-                    <a href="wishlist.html" class="wishlist-link">
+                    <a href="{{ route('shop.wishlist.index') }}" class="wishlist-link">
                         <i class="icon-heart-o"></i>
                         <span class="wishlist-count">3</span>
                         <span class="wishlist-txt">Wishlist</span>
@@ -150,7 +192,7 @@ new class extends Component {
                                 <div class="product">
                                     <div class="product-cart-details">
                                         <h4 class="product-title">
-                                            <a href="product.html">Twisted Wooden Pendant</a>
+                                            <a href="">Twisted Wooden Pendant</a>
                                         </h4>
                                         <!-- twisted wooden pendant
 Twisted Wooden Pendant -->
@@ -161,7 +203,7 @@ Twisted Wooden Pendant -->
                                     </div><!-- End .product-cart-details -->
 
                                     <figure class="product-image-container">
-                                        <a href="product.html" class="product-image">
+                                        <a href="" class="product-image">
                                             <img src="{{ asset('static/assets/images/Temp files/Twisted wooden pendent.jpg') }}"
                                                 alt="product">
                                         </a>
@@ -172,7 +214,7 @@ Twisted Wooden Pendant -->
                                 <div class="product">
                                     <div class="product-cart-details">
                                         <h4 class="product-title">
-                                            <a href="product.html">Rectangle Wooden Pendant</a>
+                                            <a href="">Rectangle Wooden Pendant</a>
                                         </h4>
 
                                         <span class="cart-product-info">
@@ -182,7 +224,7 @@ Twisted Wooden Pendant -->
                                     </div><!-- End .product-cart-details -->
 
                                     <figure class="product-image-container">
-                                        <a href="product.html" class="product-image">
+                                        <a href="" class="product-image">
                                             <img src="{{ asset('static/assets/images/Temp files/Rectangle wooden pendent.jpg') }}"
                                                 alt="product">
                                         </a>
@@ -198,8 +240,9 @@ Twisted Wooden Pendant -->
                             </div><!-- End .dropdown-cart-total -->
 
                             <div class="dropdown-cart-action">
-                                <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                <a href="{{ route('shop.cart.index') }}" class="btn btn-primary">View Cart</a>
+                                <a href="{{ route('shop.transaction.checkout') }}"
+                                    class="btn btn-outline-primary-2"><span>Checkout</span><i
                                         class="icon-long-arrow-right"></i></a>
                             </div><!-- End .dropdown-cart-total -->
                         </div><!-- End .dropdown-menu -->
@@ -218,7 +261,7 @@ Twisted Wooden Pendant -->
                         Browse Categories
                     </a>
 
-                    <div class="dropdown-menu show">
+                    <div class="dropdown-menu ">
                         <nav class="side-nav">
                             <ul class="menu-vertical sf-arrows">
                                 <li class="megamenu-container d-none">
@@ -281,7 +324,8 @@ Twisted Wooden Pendant -->
 
                                             <div class="col-md-4">
                                                 <div class="banner banner-overlay">
-                                                    <a href="category.html" class="banner banner-menu">
+                                                    <a href="{{ route('public.category.index') }}"
+                                                        class="banner banner-menu">
                                                         <img src="{{ asset('static/assets/images/demos/demo-13/menu/banner-1.jpg') }}"
                                                             alt="Banner">
                                                     </a>
@@ -290,12 +334,12 @@ Twisted Wooden Pendant -->
                                         </div><!-- End .row -->
                                     </div><!-- End .megamenu -->
                                 </li>
-                                <li><a href="#">Woodwork Lights</a></li>
-                                <li><a href="#">Table Wood Lamp</a></li>
-                                <li><a href="#">Breaker</a></li>
-                                <li><a href="#">Junction Box</a></li>
-                                <li><a href="#">Wire</a></li>
-                                <li><a href="#">Cable</a></li>
+
+                                @foreach($this->categories as $category)
+                                <li><a
+                                        href="{{ route('public.category.products.index', $category->slug) }}">{{ $category->name }}</a>
+                                </li>
+                                @endforeach
                             </ul><!-- End .menu-vertical -->
                         </nav><!-- End .side-nav -->
                     </div><!-- End .dropdown-menu -->
@@ -304,27 +348,41 @@ Twisted Wooden Pendant -->
             <div class="header-center">
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="megamenu-container active">
+                        {{-- <li class="megamenu-container active">
                             <a href="index.html">Home</a>
-                        </li>
-                        <li>
-                            <a href="category.html">Shop</a>
-                        </li>
-                        <li>
-                            <a href="category.html">Products</a>
-                        </li>
+                        </li> --}}
+
+                        <x-public.nav-link :active="request()->routeIs('home')">
+                            <a href="{{ route('home') }}">Home</a>
+                        </x-public.nav-link>
+
+                        {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                            {{ __('Dashboard') }}
+                        </x-nav-link> --}}
+
+                        <x-public.nav-link :active="request()->routeIs('public.category.index')">
+                            <a href="{{ route('public.category.index') }}">Shop</a>
+                        </x-public.nav-link>
+
+                        {{-- <li class="megamenu-container ">
+                            <a href="{{ route('public.category.index') }}">Shop</a>
+                        </li> --}}
+                        <x-public.nav-link :active="request()->routeIs('public.product.index')">
+                            <a href="{{ route('public.product.index') }}">Products</a>
+                        </x-public.nav-link>
+
 
                         <li>
                             <a href="#" class="sf-with-ul">Tags</a>
 
                             <ul>
-                                <li><a>Woodlights</a></li>
-                                <li><a>Dinning</a></li>
-                                <li><a>Bedroom</a></li>
-                                <li><a>Living room</a></li>
-                                <li><a>Three phase</a></li>
-                                <li><a>Single phase</a></li>
-                                <li><a>Scatola</a></li>
+                                @foreach($this->tags as $tag)
+
+                                <li><a href="{{ route('public.tag.products.index', $tag->slug) }}">{{ $tag->name }}</a>
+                                </li>
+
+                                @endforeach
+
                             </ul>
                         </li>
                     </ul><!-- End .menu -->

@@ -1,50 +1,66 @@
 <?php
-
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Category;
 use Illuminate\Validation\Rule;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+
+
 new #[Layout('components.layouts.admin')] class extends Component{
 
+    use WithFileUploads;
     public Category $category;
-public string $description = '';
-public string $name = '';
-public string $categoryId = '';
-public string $status = '1'; // Default to Active ('1' = Active, '0' = Inactive)
+    public $image = '';
+    
+    public string $description = '';
+    public string $name = '';
+    public string $categoryId = '';
+    public string $status = '1'; // Default to Active ('1' = Active, '0' = Inactive)
 
-public function mount(Category $category)
-{
-    $this->fill($category);
-    $this->categoryId = $this->category->id;
-    $this->status = (string) $this->category->status; // Ensure status is treated as a string
-}
+    public function mount(Category $category)
+    {
+        $this->fill($category);
+        $this->categoryId = $this->category->id;
+        $this->status = (string) $this->category->status; // Ensure status is treated as a string
+    }
 
-public function update()
-{
-    $this->validate([
-        'description' => 'nullable|string',
-        'name' => [
-            'required',
-            'string',
-            'min:3',
-            Rule::unique('categories')->ignore($this->categoryId),
-        ],
-        'status' => 'required|in:1,0', // Ensure status is either '1' or '0'
-    ], [
-        'name.unique' => 'Category already exists.',
-        'status.in' => 'Status should be either Active or Inactive.',
-    ]);
+    public function update()
+    {
+        $this->validate([
+            'description' => 'nullable|string',
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                Rule::unique('categories')->ignore($this->categoryId),
+            ],
+            'status' => 'required|in:1,0', // Ensure status is either '1' or '0'
+            'image' => 'nullable|max:10240',
+        ], [
+            'name.unique' => 'Category already exists.',
+            'status.in' => 'Status should be either Active or Inactive.',
+        ]);
 
-    // ✅ Update Category Correctly
-    $this->category->update([
-        'name' => $this->name,
-        'description' => $this->description,
-        'status' => (int) $this->status, // Convert back to integer for the database
-    ]);
+        if ($this->image) {
+            // Update image if a new one is uploaded
+            Storage::disk('public')->delete(str_replace('storage/', '', $this->category->image));
+            $image_path = 'storage/' . $this->image->store('images/category_images', 'public');
+            $this->category->update(['image' => $image_path]);
+        }
 
-    // ✅ Dispatch Event & Notify
-    $this->dispatch('Category-updated');
-}
+        // ✅ Update Category Correctly
+        $this->category->update([
+            'name' => $this->name,
+            'description' => $this->description,
+            'status' => (int) $this->status, // Convert back to integer for the database
+            'image' => $this->image ? $image_path : $this->category->image,
+        ]);
+
+        // ✅ Dispatch Event & Notify
+        $this->dispatch('Category-updated');
+        $this->reset('image');
+    }
 
 
 }; ?>
@@ -92,6 +108,14 @@ public function update()
                                 placeholder="Coffee, Furniture ..." required />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
+
+                        <div>
+                            <x-input-label for="image" :value="__('Image (Max: 10MB (Optional))')" />
+                            <x-text-input wire:model="image" name="image" type="file" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                            <div wire:loading wire:target="image" class="text-sm text-blue-500">Uploading...</div>
+                        </div>
+                        
 
                         <div>
                             <x-input-label for="description" :value="__('Description')" />

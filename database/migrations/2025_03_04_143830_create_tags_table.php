@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique()->index();
             $table->uuid('uuid')->unique();
+            $table->string('slug')->unique()->index(); // Useful for SEO and searching
             // $table->enum('status', ['active', 'inactive'])->default('active')->index(); // Index improves filtering
             $table->boolean('status')->default(true);
             $table->softDeletes();

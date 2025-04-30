@@ -29,7 +29,7 @@
     <div class="page-wrapper">
 
         {{-- Header --}}
-        <livewire:public.layout.header></livewire:public.layout.header>
+        <livewire:public.layout.header />
 
 
 
@@ -40,7 +40,7 @@
 
 
         {{-- Footer --}}
-        <livewire:public.layout.footer></livewire:public.layout.foot>
+        <livewire:public.layout.footer />
 
 
     </div><!-- End .page-wrapper -->

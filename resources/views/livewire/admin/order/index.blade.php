@@ -19,18 +19,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
             ->paginate($this->itemsPerPage, ['*'], 'page', $this->currentPage);
     }
 
-
-    
-        // return Order::where('code', 'like', '%' . $this->search . '%')
-        //     ->orderBy('created_at', 'desc') // Order by latest first
-        //     ->skip(($this->currentPage - 1) * $this->itemsPerPage)
-        //     ->take($this->itemsPerPage)
-        //     ->get();
-
-
-
-
-
     public function destroy($id)
     {
         Order::findOrFail($id)->delete();

@@ -19,9 +19,9 @@ class CategoryFactory extends Factory
         $status = $this->faker->boolean(60);
         return [
             'name' => $this->faker->name(),
+            'image' => 'static/images/placeholders/placeholder.jpg',
             'description' => $this->faker->sentence(),
-            'status' => $status,
+            'status' => true,
         ];
     }
-
 }

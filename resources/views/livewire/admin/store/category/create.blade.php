@@ -4,12 +4,16 @@ use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Category;
 use Illuminate\Validation\Rule;
+use Livewire\WithFileUploads;
+
+use Illuminate\Support\Facades\Storage;
 new #[Layout('components.layouts.admin')] class extends Component{
+    use WithFileUploads;
 
     public string $name = '';
     public string $description = '';
     public string $status = '';
-
+    public $image = '';
     public function store()
     {
         $this->validate([
@@ -21,13 +25,21 @@ new #[Layout('components.layouts.admin')] class extends Component{
             ],
             'description' => 'nullable|string',
             'status' => 'required|in:1,0', // Ensure status is either '1' or '0'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ], [
             'name.unique' => 'Category already exists.',
             'status.in' => 'Status should be either Active or Inactive.',
         ]);
 
+                // Handle image upload
+        $image_path = null;
+        if ($this->image) {
+            $image_path = Storage::disk('public')->put('images/category_images', $this->image);
+        }
+        // Store the category
         Category::create([
             'name' => $this->name,
+            'image' => $image_path ? "storage/$image_path" : 'static/images/placeholder/placeholder.jpg',
             'description' => $this->description,
             'status' => $this->status,
         ]); 
@@ -80,11 +92,23 @@ new #[Layout('components.layouts.admin')] class extends Component{
                         </div>
 
                         <div>
+                            <x-input-label for="image" :value="__('Image (Max: 10MB (Optional))')" />
+                            <x-text-input wire:model="image" name="image" type="file" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                            <div wire:loading wire:target="image" class="text-sm text-blue-500">Uploading...</div>
+                        </div>
+                        <div>
+                            @if ($image)
+                            <x-input-label for="image" :value="__('Image Preview')" />
+                            <img src="{{ $image->temporaryUrl() }}" alt="Image Preview" class="mt-2 w-32 h-32">
+                            @endif
+                        </div>
+
+                        <div>
                             <x-input-label for="description" :value="__('Description')" />
 
                             <x-textarea placeholder="Write a description" wire:model="description" name="description"
                                 autocomplete="description" class="mt-1 block w-full h-64"></x-textarea>
-
 
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>

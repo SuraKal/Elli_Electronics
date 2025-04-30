@@ -99,16 +99,16 @@ new class extends Component {
                         <h4 class="widget-title">Information</h4><!-- End .widget-title -->
 
                         <ul class="widget-list">
-                            <li><a href="about.html">About Elli</a></li>
+                            <li><a href="{{ route('public.pages.about') }}">About Elli</a></li>
                             <li><a href="#">How to shop on Elli</a></li>
-                            <li><a href="faq.html">FAQ</a></li>
-                            <li><a href="contact.html">Contact us</a></li>
-                            <li><a href="login.html">Log in</a></li>
+                            <li><a href="{{ route('public.pages.faq') }}">FAQ</a></li>
+                            <li><a href="{{ route('public.pages.contact') }}">Contact us</a></li>
+                            <li><a href="{{ route('login') }}">Log in</a></li>
                         </ul><!-- End .widget-list -->
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-4 col-lg-3 -->
 
-                <div class="col-sm-4 col-lg-2">
+                <div class="col-sm-4 col-lg-2 d-none">
                     <div class="widget">
                         <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
 
@@ -128,11 +128,11 @@ new class extends Component {
                         <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
                         <ul class="widget-list">
-                            <li><a href="#">Sign In</a></li>
-                            <li><a href="cart.html">View Cart</a></li>
-                            <li><a href="#">My Wishlist</a></li>
-                            <li><a href="#">Track My Order</a></li>
-                            <li><a href="#">Help</a></li>
+                            <li><a href="{{ route('login') }}" wire:navigate>Sign In</a></li>
+                            <li><a href="{{ route('shop.cart.index') }}" wire:navigate>View Cart</a></li>
+                            <li><a href="{{ route('shop.wishlist.index') }}" wire:navigate>My Wishlist</a></li>
+                            <li><a href="{{ route('shop.cart.index') }}" wire:navigate> Track My Order</a></li>
+                            <li><a href="{{ route('public.pages.contact') }}" wire:navigate>Help</a></li>
                         </ul><!-- End .widget-list -->
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-64 col-lg-3 -->

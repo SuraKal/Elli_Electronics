@@ -119,98 +119,155 @@ class SystemSeeder extends Seeder
             'logo' => 'static/images/logo/Nana-Express-Logo.png'
         ]);
 
-        $products = Product::factory(3)
-    ->afterCreating(function (Product $product) {
-        // Attach relationships
-        $product->categories()->attach(Category::factory()->create()->id);
-        $product->tags()->attach(Tag::factory()->create()->id);
-        $product->images()->createMany(Image::factory(3)->make()->toArray());
+    //     $products = Product::factory(3)
+    // ->afterCreating(function (Product $product) {
+    //     // Attach relationships
+    //     $product->categories()->attach(Category::factory()->create()->id);
+    //     $product->tags()->attach(Tag::factory()->create()->id);
+    //     $product->images()->createMany(Image::factory(3)->make()->toArray());
 
-        // Create ProductDetail
-        $detail = ProductDetail::factory()->create([
-            'product_id' => $product->id,
-        ]);
+    //     // Create ProductDetail
+    //     $detail = ProductDetail::factory()->create([
+    //         'product_id' => $product->id,
+    //     ]);
 
 
-        // Create template if template_status is true
-        if ($detail->template_status) {
-            $template = Template::factory()->create();
-            ProductTemplate::factory()->create([
-                'product_id' => $product->id,
-                'template_id' => $template->id,
-                'structure' => $template->structure,
-            ]);
+    //     // Create template if template_status is true
+    //     if ($detail->template_status) {
+    //         $template = Template::factory()->create();
+    //         ProductTemplate::factory()->create([
+    //             'product_id' => $product->id,
+    //             'template_id' => $template->id,
+    //             'structure' => $template->structure,
+    //         ]);
+    //     }
+
+    //     // Create Wishlist
+    //     Wishlist::factory(3)->create([
+    //         'product_id' => $product->id,
+    //     ]);
+
+    //     // Create Orders
+    //     $orders = Order::factory(3)->create([
+    //         'product_id' => $product->id,
+    //     ]);
+
+    //     foreach ($orders as $order) {
+    //         // Ensure product and template are loaded
+    //         $order->load('product.template');
+
+
+    //         if($order->product->detail->template_status){
+    //             $product_ordered = $order->product->template->first()?->structure;
+    //         }else{
+    //             $product_ordered = NULL;
+    //         }
+
+    //         Orderdetail::factory()->create([
+    //             'order_id' => $order->id,
+    //             'product_ordered' => $product_ordered,
+    //             'price' => $order->product?->price,
+    //         ]);
+
+    //         // // Create Transaction
+    //         // if($order->status != 'pending'){
+    //         //     $status =  'unconfirmed';
+    //         // }   
+
+
+
+    //         $method = 'bank';
+    //         $transaction = Transaction::factory()->create([
+    //             'order_id' => $order->id,
+    //             'status' => 'unconfirmed',
+    //             'method' => $method,
+    //         ]);
+
+    //         // Create Bank record if method is bank
+    //         if ($method === 'bank') {
+    //             Bank::factory()->create([
+    //                 'transaction_id' => $transaction->id,
+    //             ]);
+    //         }
+
+    //         if($order->status != 'pending'){
+    //             Delivery::factory()->create();
+    //         }
+    //     }
+
+
+    // })
+    // ->create();
+        
+
+        $categories = [
+            [
+                'name' => 'Woodwork Lights', 
+                'image' => 'static/images/category_images/woodworkLightsCategoryImage.png'
+            ],
+            [
+                'name' => 'Table Wood Lamp', 
+                'image' => 'static/images/category_images/tableWoodLampCategoryImage.png'
+            ],
+            [
+                'name' => 'Breaker', 
+                'image' => 'static/images/category_images/breakerCategoryImage.png'
+            ],
+            [
+                'name' => 'Junction Box', 
+                'image' => 'static/images/category_images/junctionBoxCategoryImage.png'
+            ],
+            [
+                'name' => 'Wire', 
+                'image' => 'static/images/category_images/wireCategoryImage.png'
+            ],
+            [
+                'name' => 'Cable', 
+                'image' => 'static/images/category_images/cableCategoryImage.png'
+            ]
+        ];
+        foreach ($categories as $category) {
+            Category::factory()->create($category);
         }
 
-        // Create Wishlist
-        Wishlist::factory(3)->create([
-            'product_id' => $product->id,
-        ]);
-
-        // Create Orders
-        $orders = Order::factory(3)->create([
-            'product_id' => $product->id,
-        ]);
-
-        foreach ($orders as $order) {
-            // Ensure product and template are loaded
-            $order->load('product.template');
-
-
-            if($order->product->detail->template_status){
-                $product_ordered = $order->product->template->first()?->structure;
-            }else{
-                $product_ordered = NULL;
-            }
-
-            Orderdetail::factory()->create([
-                'order_id' => $order->id,
-                'product_ordered' => $product_ordered,
-                'price' => $order->product?->price,
-            ]);
-
-            // // Create Transaction
-            // if($order->status != 'pending'){
-            //     $status =  'unconfirmed';
-            // }   
-
-
-
-            $method = 'bank';
-            $transaction = Transaction::factory()->create([
-                'order_id' => $order->id,
-                'status' => 'unconfirmed',
-                'method' => $method,
-            ]);
-
-            // Create Bank record if method is bank
-            if ($method === 'bank') {
-                Bank::factory()->create([
-                    'transaction_id' => $transaction->id,
-                ]);
-            }
-
-            if($order->status != 'pending'){
-                Delivery::factory()->create();
-            }
+        $tags = [
+            [
+                'name' => 'Woodlights', 
+            ],
+            [
+                'name' => 'Dinning', 
+            ],
+            [
+                'name' => 'Bedroom', 
+            ],
+            [
+                'name' => 'Living room', 
+            ],
+            [
+                'name' => 'Three phase', 
+            ],
+            [
+                'name' => 'Single phase', 
+            ],
+            [
+                'name' => 'Scatola', 
+            ]
+        ];
+        foreach ($tags as $tag) {
+            Tag::factory()->create($tag);
         }
-
-
-    })
-    ->create();
-
 
     
-    Setting::factory()->create([
-        'contact_phone' => '+251 912690007',
-        'contact_email' => 'ellielectronics@gmail.com',
-        'address' => 'Ureal, Addis Abeba, Ethiopia',
-        'logo' => 'storage/images/logo/logo.png'
-    ]);
-    Socialmedia::factory()->create([
-        'tiktok' => 'https://www.tiktok.com/@ellielectricalequipment',
-        'instagram' => 'https://www.instagram.com/elli_electrical_equipment',
-    ]);
+        Setting::factory()->create([
+            'contact_phone' => '+251 912690007',
+            'contact_email' => 'ellielectronics@gmail.com',
+            'address' => 'Ureal, Addis Abeba, Ethiopia',
+            'logo' => 'storage/images/logo/logo.png'
+        ]);
+        Socialmedia::factory()->create([
+            'tiktok' => 'https://www.tiktok.com/@ellielectricalequipment',
+            'instagram' => 'https://www.instagram.com/elli_electrical_equipment',
+        ]);
 
 
     }

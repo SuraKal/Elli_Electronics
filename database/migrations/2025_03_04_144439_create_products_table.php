@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('currency')->default('ETB')->index(); // No index needed (low cardinality)
             $table->decimal('price', 10, 2); // Indexed if frequently used for filtering/sorting
             $table->uuid('uuid')->unique(); // Unique identifier, already indexed automatically
+            $table->string('slug')->unique()->index(); // Useful for SEO and searching
             // $table->enum('status', ['active', 'inactive'])->default('active')->index(); // Frequently filtered
             $table->boolean('status')->default(true);
             $table->string('created_date'); // Change to `timestamp` and index it for sorting

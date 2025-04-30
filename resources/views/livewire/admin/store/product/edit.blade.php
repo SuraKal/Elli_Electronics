@@ -121,6 +121,7 @@ new #[Layout('components.layouts.admin')] class extends Component{
             'status' => (int) $this->status,
             'currency' => $this->currency,
             'price' => (float) $this->price,
+            'image' => $this->image ? $image_path : $this->product->image,
         ]);
 
         // Update or create product detail
